@@ -1,18 +1,18 @@
 # Maintainer: Michael Spencer <sonrisesoftware@gmail.com>
 
-_pkgname=qml-material
+_pkgname=qml-extras
 pkgname=$_pkgname-git
 pkgver=0.0.1
 pkgrel=1
 pkgdesc="A UI framework for QtQuick implementing Material Design"
 arch=("i686" "x86_64")
-url="https://github.com/papyros/qml-material"
+url="https://github.com/papyros/qml-extras"
 license=("LGPL")
-depends=("qt5-declarative" "qml-extras")
+depends=("qt5-declarative")
 makedepends=("git")
 provides=("$_pkgname")
 conflicts=("$_pkgname")
-source=("$_pkgname::git+https://github.com/papyros/qml-material.git")
+source=("$_pkgname::git+https://github.com/papyros/qml-extras.git")
 sha256sums=("SKIP")
 
 pkgver() {
