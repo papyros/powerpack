@@ -1,6 +1,11 @@
 *~
-*/pkg
-*/src
-*/*.pkg.tar.xz
-qml-material-git/qml-material
-qml-extras-git/qml-extras
+*.pkg.tar.xz
+*.log
+build
+
+source/*/pkg
+source/*/src
+source/qml-material-git/qml-material
+source/qml-extras-git/qml-extras
+source/ostree-git/ostree-git
+source/linux-user-chroot/*.tar.gz

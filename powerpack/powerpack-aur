@@ -1,0 +1,2 @@
+mkdir -p source/$2
+wget https://aur.archlinux.org/packages/$1/$2/PKGBUILD -O source/$2/PKGBUILD

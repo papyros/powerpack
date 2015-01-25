@@ -1,0 +1,42 @@
+#!/usr/bin/bash
+
+set -e
+set -x
+
+channel_name=$1
+
+base_dir="$(pwd)"
+
+source_dir="$base_dir"/source
+conf_dir="$base_dir"/channels
+
+CHROOT="$base_dir"/build
+repo_dir="$base_dir"/packages
+
+die() {
+    echo "$@"
+    exit 1
+}
+
+. "$conf_dir"/$channel_name.conf
+
+# Set up the chroot
+
+mkdir -p $CHROOT
+
+if [ ! -d "$CHROOT/root" ]; then
+    mkarchroot $CHROOT/root base-devel
+else
+    arch-nspawn $CHROOT/root pacman -Syu
+fi
+
+rm -f "$repo_dir"/*
+
+for module in $MODULES
+do
+    pushd $source_dir/$module
+    makechrootpkg -r $CHROOT -- -i
+    pkg_name=$(ls -t *.pkg.tar.xz | head -n 1);
+    cp -f $pkg_name $repo_dir;
+    repo-add $repo_dir/$OSNAME.db.tar.gz $repo_dir/$pkg_name
+done

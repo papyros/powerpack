@@ -1,0 +1,106 @@
+#!/usr/bin/bash
+
+# powerpack-commit name
+
+set -e
+set -x
+
+channel_name=$1
+
+base_dir="$(pwd)"
+
+chnnels_dir="$base_dir"/conf
+
+build_dir = "$base_dir/build/$channel_name"
+work_dir="$build_dir"/work
+cache_dir="$build_dir"/cache
+os_dir="$build_dir"/os
+repo_dir="$build_dir"/out/repo
+out_dir="$build_dir"/out
+conf_dir="$build_dir"/conf
+ostree_dir="$build_dir"/ostree
+
+#----- Utility methods -----#
+
+die() {
+    echo "$@"
+    exit 1
+}
+
+# Require that the command be run as root (via sudo)
+(( EUID != 0 )) && die "This script must be run as root."
+
+# Load the channel configuration
+. "$channels_dir"/$1.conf
+
+# Set up the build directory
+mkdir -p "$build_dir"
+
+# Copy a pacman configuration script into the working directory
+cp -f "$conf_dir"/pacman.conf "$work_dir"
+
+# Update the pacman's cache dir to point to a dir inside the build directory
+sed -i "s:^#CacheDir.*:CacheDir = $cache_dir:" "$work_dir"/pacman.conf
+
+# Add the local repository to the pacman config
+echo -e "\n[$OSNAME]\nSigLevel = Never\nServer = file://$repo_dir" >> \
+    "$work_dir"/pacman.conf
+
+# TODO: Figure out later
+#for module in $MODULES:
+#do
+#    rm -f "$cache_dir"/$module-*
+#done
+
+rm -rf "$os_dir"
+mkdir -p "$os_dir"
+
+# Install all the requested packages
+pacstrap -dcC "$work_dir"/pacman.conf "$os_dir" $PKGS
+
+kernel_version=$(pacman -r "$os_dir" -Q linux | cut -d' ' -f 2)-ARCH
+
+systemd-nspawn -D "$os_dir" \
+    mkinitcpio -c /etc/ostree-mkinitcpio.conf -g /boot/initramfs-linux.img \
+        -k $kernel_version -S autodetect
+
+boot_dir="$os_dir"/boot
+
+rm -f "$boot_dir"/initramfs-linux-fallback.img
+
+checksum=$(cat "$boot_dir"/initramfs-* "$boot_dir"/vmlinuz-* | \
+           sha256sum | cut -d' ' -f 1)
+
+mv "$boot_dir"/initramfs-*.img "$boot_dir"/initramfs-$checksum
+mv "$boot_dir"/vmlinuz-* "$boot_dir"/vmlinuz-$checksum
+
+if [ ! -d "$ostree_dir" ]; then
+    ostree --repo="$ostree_dir" init --mode archive-z2
+fi
+
+rmdir "$os_dir"/{home,opt,root,mnt}
+rm -rf "$os_dir"/srv
+mv "$os_dir"/etc "$os_dir"/usr/etc
+mkdir "$os_dir"/sysroot
+
+ln -s sysroot/ostree "$os_dir"/ostree
+ln -s sysroot/tmp "$os_dir"/tmp
+ln -s var/home "$os_dir"/home
+ln -s var/roothome "$os_dir"/root
+
+cat << EOF > "$os_dir"/usr/etc/fstab
+LABEL=$OSNAME-boot /boot ext4 rw,relatime,data=ordered 0 2
+LABEL=$OSNAME-root / ext4 rw,relatime,data=ordered 0 1
+EOF
+
+cat << EOF > "$os_dir"/usr/lib/tmpfiles.d/ostree.conf
+d /var/log/journal 0755 root root -
+L /var/home - - - - ../sysroot/home
+d /var/roothome 0700 root root -
+d /var/lib 0755 root root -
+EOF
+
+# cp /usr/bin/eta-install "$os_dir"/usr/bin
+
+ostree --repo="$ostree_dir" commit --tree=dir="$os_dir" --branch=master \
+    --subject "Build on $(date)"
