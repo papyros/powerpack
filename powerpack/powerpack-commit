@@ -9,15 +9,11 @@ channel_name=$1
 
 base_dir="$(pwd)"
 
-chnnels_dir="$base_dir"/conf
+channels_dir="$base_dir"/channels
 
-build_dir = "$base_dir/build/$channel_name"
-work_dir="$build_dir"/work
-cache_dir="$build_dir"/cache
-os_dir="$build_dir"/os
-repo_dir="$build_dir"/out/repo
-out_dir="$build_dir"/out
-conf_dir="$build_dir"/conf
+build_dir="$base_dir/build/$channel_name"
+os_dir="$build_dir"/pacstrap
+repo_dir="$base_dir"/packages
 ostree_dir="$build_dir"/ostree
 
 #----- Utility methods -----#
@@ -35,16 +31,17 @@ die() {
 
 # Set up the build directory
 mkdir -p "$build_dir"
+mkdir -p "$os_dir"
 
 # Copy a pacman configuration script into the working directory
-cp -f "$conf_dir"/pacman.conf "$work_dir"
+cp -f "$base_dir"/pacman.conf "$build_dir"
 
 # Update the pacman's cache dir to point to a dir inside the build directory
-sed -i "s:^#CacheDir.*:CacheDir = $cache_dir:" "$work_dir"/pacman.conf
+# sed -i "s:^#CacheDir.*:CacheDir = $cache_dir:" "$work_dir"/pacman.conf
 
 # Add the local repository to the pacman config
 echo -e "\n[$OSNAME]\nSigLevel = Never\nServer = file://$repo_dir" >> \
-    "$work_dir"/pacman.conf
+    "$build_dir"/pacman.conf
 
 # TODO: Figure out later
 #for module in $MODULES:
@@ -52,11 +49,8 @@ echo -e "\n[$OSNAME]\nSigLevel = Never\nServer = file://$repo_dir" >> \
 #    rm -f "$cache_dir"/$module-*
 #done
 
-rm -rf "$os_dir"
-mkdir -p "$os_dir"
-
 # Install all the requested packages
-pacstrap -dcC "$work_dir"/pacman.conf "$os_dir" $PKGS
+pacstrap -dcC "$build_dir"/pacman.conf "$os_dir" $PKGS
 
 kernel_version=$(pacman -r "$os_dir" -Q linux | cut -d' ' -f 2)-ARCH
 
