@@ -11,3 +11,5 @@ source/qml-material-git/qml-material
 source/qml-extras-git/qml-extras
 source/ostree-git/ostree-git
 source/linux-user-chroot/*.tar.gz
+source/xdg-app-git/xdg-app
+source/glib2/glib2

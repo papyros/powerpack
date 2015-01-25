@@ -1,0 +1,43 @@
+_pkgname=xdg-app
+pkgname=$_pkgname-git
+pkgver=
+pkgrel=1
+url="https://github.com/alexlarsson/xdg-app/"
+pkgdesc='Application deployment framework for desktop apps.'
+arch=('i686' 'x86_64')
+license=('GPL' 'LGPL')
+provides=('xdg-app')
+conflicts=("xdg-app")
+makedepends=('pkg-config' 'gtk-doc' 'git')
+depends=('glib2>=2.43'
+         'libgsystem'
+         'glib-networking'
+         'ostree')
+
+source=("${_pkgname}::git+https://github.com/alexlarsson/xdg-app.git")
+md5sums=('SKIP')
+
+# TODO: Uncomment later
+pkgver () {
+  cd "${srcdir}/${_pkgname}"
+  # git describe --long | sed -r 's/^v//;s/([^-]*-g)/r\1/;s/-/./g'
+  git rev-parse --short HEAD
+}
+
+build() {
+  cd "${srcdir}/${_pkgname}"
+	./autogen.sh \
+		--prefix=/usr \
+		--sbindir=/usr/bin \
+		--libexecdir=/usr/lib/ \
+		--sysconfdir=/etc \
+		--with-systemdsystemunitdir=/usr/lib/systemd/system \
+		--enable-gtk-doc
+    ./configure
+	make
+}
+
+package() {
+  cd "${srcdir}/${_pkgname}"
+  make install DESTDIR="$pkgdir"
+}
