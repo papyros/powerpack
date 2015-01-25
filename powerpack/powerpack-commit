@@ -23,6 +23,10 @@ die() {
     exit 1
 }
 
+replace() {
+    sed s#"$1"#"$2"# < $3 > tmpfile && mv tmpfile $3
+}
+
 # Require that the command be run as root (via sudo)
 (( EUID != 0 )) && die "This script must be run as root."
 
@@ -40,8 +44,9 @@ cp -f "$base_dir"/pacman.conf "$build_dir"
 # sed -i "s:^#CacheDir.*:CacheDir = $cache_dir:" "$work_dir"/pacman.conf
 
 # Add the local repository to the pacman config
-echo -e "\n[$OSNAME]\nSigLevel = Never\nServer = file://$repo_dir" >> \
-    "$build_dir"/pacman.conf
+
+replace @OS_NAME@ $OSNAME $build_dir/pacman.conf
+replace @REPO_PATH@ $repo_dir $build_dir/pacman.conf
 
 # TODO: Figure out later
 #for module in $MODULES:
