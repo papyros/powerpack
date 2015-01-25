@@ -1,7 +1,9 @@
 *~
 *.pkg.tar.xz
-*.log
+*.log*
 build
+chroot
+packages
 
 source/*/pkg
 source/*/src

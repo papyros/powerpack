@@ -10,7 +10,7 @@ base_dir="$(pwd)"
 source_dir="$base_dir"/source
 conf_dir="$base_dir"/channels
 
-CHROOT="$base_dir"/build
+CHROOT="$base_dir"/chroot
 repo_dir="$base_dir"/packages
 
 die() {
@@ -20,9 +20,8 @@ die() {
 
 . "$conf_dir"/$channel_name.conf
 
-# Set up the chroot
-
 mkdir -p $CHROOT
+mkdir -p $repo_dir
 
 if [ ! -d "$CHROOT/root" ]; then
     mkarchroot $CHROOT/root base-devel
