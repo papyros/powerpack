@@ -1,7 +1,7 @@
 _pkgname=xdg-app
 pkgname=$_pkgname-git
-pkgver=
-pkgrel=1
+pkgver=97747a3
+pkgrel=3
 url="https://github.com/alexlarsson/xdg-app/"
 pkgdesc='Application deployment framework for desktop apps.'
 arch=('i686' 'x86_64')
@@ -28,12 +28,7 @@ build() {
   cd "${srcdir}/${_pkgname}"
 	./autogen.sh \
 		--prefix=/usr \
-		--sbindir=/usr/bin \
-		--libexecdir=/usr/lib/ \
-		--sysconfdir=/etc \
-		--with-systemdsystemunitdir=/usr/lib/systemd/system \
-		--enable-gtk-doc
-    ./configure
+		--with-systemdsystemunitdir=/usr/lib/systemd/system
 	make
 }
 

@@ -15,6 +15,7 @@ build_dir="$base_dir/build/$channel_name"
 os_dir="$build_dir"/pacstrap
 repo_dir="$base_dir"/packages
 ostree_dir="$build_dir"/ostree
+cache_dir="$build_dir"/cache
 
 #----- Utility methods -----#
 
@@ -48,11 +49,12 @@ cp -f "$base_dir"/pacman.conf "$build_dir"
 replace @OS_NAME@ $OSNAME $build_dir/pacman.conf
 replace @REPO_PATH@ $repo_dir $build_dir/pacman.conf
 
-# TODO: Figure out later
-#for module in $MODULES:
-#do
-#    rm -f "$cache_dir"/$module-*
-#done
+sed -i "s:^#CacheDir.*:CacheDir = $cache_dir:" "$build_dir"/pacman.conf
+
+for module in $MODULES:
+do
+   rm -f "$cache_dir"/$module-*
+done
 
 # Install all the requested packages
 pacstrap -dcC "$build_dir"/pacman.conf "$os_dir" $PKGS
