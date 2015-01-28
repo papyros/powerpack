@@ -34,6 +34,8 @@ replace() {
 # Load the channel configuration
 . "$channels_dir"/$channel_name/channel.conf
 
+rm -rf "$os_dir"
+
 # Set up the build directory
 mkdir -p "$build_dir"
 mkdir -p "$os_dir"
