@@ -62,6 +62,16 @@ pacstrap -dcC "$build_dir"/pacman.conf "$os_dir" $PKGS
 # Set up the os-release file
 cp "$channels_dir"/$channel_name/os-release "$os_dir"/etc/os-release
 
+# Copy the post-install setup file and run it
+cp "$channels_dir"/$channel_name/post-install "$os_dir"/tmp/post-install
+chmod +x "$os_dir"/tmp/post-install
+
+systemd-nspawn -D "$os_dir" /tmp/post-install
+
+rm "$os_dir"/tmp/post-install
+
+# Set up the OSTree init image
+
 kernel_version=$(pacman -r "$os_dir" -Q linux | cut -d' ' -f 2)-ARCH
 
 systemd-nspawn -D "$os_dir" \
