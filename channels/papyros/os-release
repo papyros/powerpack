@@ -1,0 +1,7 @@
+NAME="Papyros"
+ID=papyrps
+PRETTY_NAME="Papyros"
+ANSI_COLOR="0;36"
+HOME_URL="http://papyros.io/"
+SUPPORT_URL="https://github.com/papyros/papyros/"
+BUG_REPORT_URL="https://github.com/papyros/papyros/issues"

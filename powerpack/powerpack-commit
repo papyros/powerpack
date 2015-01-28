@@ -32,7 +32,7 @@ replace() {
 (( EUID != 0 )) && die "This script must be run as root."
 
 # Load the channel configuration
-. "$channels_dir"/$1.conf
+. "$channels_dir"/$channel_name/channel.conf
 
 # Set up the build directory
 mkdir -p "$build_dir"
@@ -58,6 +58,9 @@ done
 
 # Install all the requested packages
 pacstrap -dcC "$build_dir"/pacman.conf "$os_dir" $PKGS
+
+# Set up the os-release file
+cp "$channels_dir"/$channel_name/os-release "$os_dir"/etc/os-release
 
 kernel_version=$(pacman -r "$os_dir" -Q linux | cut -d' ' -f 2)-ARCH
 

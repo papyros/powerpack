@@ -18,7 +18,7 @@ die() {
     exit 1
 }
 
-. "$conf_dir"/$channel_name.conf
+. "$conf_dir"/$channel_name/channel.conf
 
 mkdir -p $CHROOT
 mkdir -p $repo_dir

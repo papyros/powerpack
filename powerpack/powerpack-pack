@@ -1,0 +1,77 @@
+#!/usr/bin/bash
+
+set -e
+set -x
+
+channel_name=$1
+
+base_dir="$(pwd)"
+
+channels_dir="$base_dir"/channels
+
+build_dir="$base_dir/build/$channel_name"
+ostree_dir="$build_dir"/ostree
+
+#----- Utility methods -----#
+
+die() {
+    echo "$@"
+    exit 1
+}
+
+replace() {
+    sed s#"$1"#"$2"# < $3 > tmpfile && mv tmpfile $3
+}
+
+# Require that the command be run as root (via sudo)
+(( EUID != 0 )) && die "This script must be run as root."
+
+# Load the channel configuration
+. "$channels_dir"/$channel_name/channel.conf
+
+# Set up the build directory
+mkdir -p "$build_dir"
+
+image_path="$build_dir"/$OSNAME.img
+
+rm -f "$image_path"
+
+sudo -u $SUDO_USER truncate -s 5GB "$image_path"
+
+parted "$image_path" mklabel msdos
+parted "$image_path" mkpart primary ext4 0% 10%
+parted "$image_path" mkpart primary ext4 10% 100%
+parted "$image_path" set 1 boot on
+
+modprobe loop
+
+losetup /dev/loop0 "$image_path" -o 1048576 --sizelimit 499121664
+losetup /dev/loop1 "$image_path" -o 500170752 --sizelimit 4499439104
+
+mkfs.ext4 /dev/loop0
+mkfs.ext4 /dev/loop1
+
+e2label /dev/loop1 $OSNAME-root
+e2label /dev/loop0 $OSNAME-boot
+
+sysroot=/mnt/$OSNAME
+
+mkdir -p "$sysroot"
+
+mount /dev/loop1 "$sysroot"
+mkdir -p "$sysroot"/boot
+mount /dev/loop0 "$sysroot"/boot
+
+./powerpack/powerpack-install -n $OSNAME -o "$ostree_dir" -u "$ORIGIN_URL" "$sysroot"
+
+umount $sysroot/boot
+umount $sysroot
+
+losetup -d /dev/loop0
+losetup -d /dev/loop1
+
+dd bs=440 count=1 conv=notrunc \
+    if=/usr/lib/syslinux/bios/mbr.bin of="$image_path"
+
+rm -f "$image_path".xz
+xz "$image_path"

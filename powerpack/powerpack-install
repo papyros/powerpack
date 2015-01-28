@@ -1,0 +1,95 @@
+#!/usr/bin/bash
+
+set -e
+set -x
+
+die() {
+    echo "$@"
+    exit 1
+}
+
+usage() {
+    echo "Usage: ${0##*/} [options] <target>"
+    echo "The <target> can be either a device or a directory."
+    echo 'Flags:'
+    echo '-h         This help'
+    echo '-s <dir>   The OSTree repository'
+    echo '-n <name>  The OS name'
+    echo '-u <url>   The origin URL'
+
+    exit 1
+}
+
+(( EUID != 0 )) && die "This script must be run as root."
+
+while getopts 'hs:o:n:u:' arg; do
+    case "$arg" in
+        h) usage ;;
+        o) ostree_dir="$OPTARG" ;;
+        n) osname="$OPTARG" ;;
+        u) origin_url="$OPTARG" ;;
+    esac
+done
+shift $(($OPTIND - 1))
+
+target=$1
+
+[ -z "$ostree_dir" ] && ostree=/ostree/repo
+[ -z "$osname" ] && die "Please specify the OS name."
+[ -z "$target" ] && die "Please specify the target."
+
+if [[ $target == /dev* ]]; then
+    parted "$target" mklabel msdos
+    parted "$target" unit MB mkpart primary ext4 0 100
+    parted "$target" unit MB mkpart primary ext4 100 -0
+    parted "$target" set 1 boot on
+
+    mkfs.ext4 "$target"1
+    mkfs.ext4 "$target"2
+
+    sysroot=/mnt
+
+    mkdir -p "$sysroot"/mnt
+    mount "$target"2 "$sysroot"/mnt
+
+    mkdir -p "$sysroot"/mnt/boot
+    mount "$target"1 "$sysroot"/mnt/boot
+else
+    sysroot="$target"
+fi
+
+mkdir "$sysroot"/home
+
+mkdir "$sysroot"/boot/loader.0
+touch "$sysroot"/boot/loader.0/syslinux.cfg
+ln -s loader.0 "$sysroot"/boot/loader
+
+mkdir "$sysroot"/boot/syslinux
+ln -s ../loader/syslinux.cfg "$sysroot"/boot/syslinux/syslinux.cfg
+
+ostree admin --sysroot="$sysroot" os-init $osname
+
+ostree --repo="$sysroot"/ostree/repo pull-local --remote=$osname \
+    "$ostree_dir" master
+
+if [ ! -z "$origin_url" ]; then
+    ostree --repo="$sysroot"/ostree/repo remote add $osname "$origin_url" \
+        --set=gpg-verify=false
+fi
+
+origin_tmp_file=$(mktemp)
+
+echo -e "[origin]\nrefspec=$osname:master" > "$origin_tmp_file"
+
+ostree admin --sysroot="$sysroot" deploy master \
+    --karg="root=LABEL=$osname-root rw" --os=$osname \
+    --origin-file "$origin_tmp_file"
+
+rm -f "$origin_tmp_file"
+
+extlinux -i "$sysroot"/boot
+
+if [[ $target == /dev* ]]; then
+    umount "$target"1
+    umount "$target"2
+fi
