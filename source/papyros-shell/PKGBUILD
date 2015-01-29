@@ -1,0 +1,26 @@
+# Maintainer: Michael Spencer <sonrisesoftware@gmail.com>
+
+pkgname=papyros-shell
+pkgver=0.0.2
+pkgrel=1
+pkgdesc="Wayland and QtQuick based desktop shell for Papyros"
+arch=("i686" "x86_64")
+url="https://github.com/papyros/papyros-shell"
+license=("GPL")
+depends=("qt5-declarative" "qt5-wayland" "qml-material" "qml-extras" "qml-desktop")
+makedepends=("git")
+provides=("$pkgname")
+source=("$pkgname::git+https://github.com/papyros/papyros-shell.git#tag=v$pkgver")
+sha256sums=("SKIP")
+
+prepare() {
+	mkdir -p build
+	cd build
+	qmake "$srcdir/$pkgname"
+	make
+}
+
+package() {
+	cd build
+	make INSTALL_ROOT="$pkgdir" install
+}

@@ -4,9 +4,12 @@
 build
 chroot
 packages
+temp
 
 source/*/pkg
 source/*/src
+source/papyros-shell/papyros-shell
+source/qml-desktop/qml-desktop
 source/qml-material/qml-material
 source/qml-extras/qml-extras
 source/ostree-git/ostree-git
