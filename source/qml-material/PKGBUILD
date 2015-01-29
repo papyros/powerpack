@@ -1,8 +1,7 @@
 # Maintainer: Michael Spencer <sonrisesoftware@gmail.com>
 
-_pkgname=qml-material
-pkgname=$_pkgname-git
-pkgver=0.0.1
+pkgname=qml-material
+pkgver=0.0.2
 pkgrel=1
 pkgdesc="A UI framework for QtQuick implementing Material Design"
 arch=("i686" "x86_64")
@@ -10,20 +9,14 @@ url="https://github.com/papyros/qml-material"
 license=("LGPL")
 depends=("qt5-declarative" "qml-extras")
 makedepends=("git")
-provides=("$_pkgname")
-conflicts=("$_pkgname")
-source=("$_pkgname::git+https://github.com/papyros/qml-material.git")
+provides=("$pkgname")
+source=("$pkgname::git+https://github.com/papyros/qml-material.git#tag=v$pkgver")
 sha256sums=("SKIP")
-
-pkgver() {
-	cd "$srcdir/$_pkgname"
-	git describe --long --tags | sed -r 's/([^-]*-g)/r\1/;s/-/./g'
-}
 
 prepare() {
 	mkdir -p build
 	cd build
-	qmake "$srcdir/$_pkgname"
+	qmake "$srcdir/$pkgname"
 	make
 }
 
@@ -31,4 +24,3 @@ package() {
 	cd build
 	make INSTALL_ROOT="$pkgdir" install
 }
-
