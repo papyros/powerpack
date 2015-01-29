@@ -3,8 +3,6 @@
 set -e
 set -x
 
-channel_name=$1
-
 base_dir="$(pwd)"
 
 source_dir="$base_dir"/source
@@ -18,8 +16,6 @@ die() {
     exit 1
 }
 
-. "$conf_dir"/$channel_name/channel.conf
-
 mkdir -p $CHROOT
 mkdir -p $repo_dir
 
@@ -29,7 +25,13 @@ else
     arch-nspawn $CHROOT/root pacman -Syu
 fi
 
-rm -f "$repo_dir"/*
+if [ $# -ne 0 ]; then
+    MODULES=$@
+else
+    MODULES=$(ls source)
+
+    rm -f "$repo_dir"/*
+fi
 
 for module in $MODULES
 do
@@ -37,5 +39,5 @@ do
     makechrootpkg -r $CHROOT -- -i
     pkg_name=$(ls -t *.pkg.tar.xz | head -n 1);
     cp -f $pkg_name $repo_dir;
-    repo-add $repo_dir/$OSNAME.db.tar.gz $repo_dir/$pkg_name
+    repo-add $repo_dir/papyros.db.tar.gz $repo_dir/$pkg_name
 done
