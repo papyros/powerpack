@@ -8,6 +8,11 @@ temp
 
 source/*/pkg
 source/*/src
+source/qt5-base-git/qt5-base
+source/qt5-declarative-git/qt5-declarative
+source/qt5-xmlpatterns-git/qt5-xmlpatterns
+source/qt5-wayland-dev-git/qt5-wayland
+source/broadcom-wl/*.tar.gz
 source/papyros-shell/papyros-shell
 source/qml-desktop/qml-desktop
 source/qml-material/qml-material

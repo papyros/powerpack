@@ -1,5 +1,5 @@
 pkgname='ostree-git'
-pkgver=
+pkgver=2015.3
 pkgrel=1
 url="http://git.gnome.org/browse/ostree/tree/README.md"
 pkgdesc='OSTree is a tool for managing bootable, versioned filesystem trees.'
@@ -16,13 +16,8 @@ depends=('libarchive'
          'libgsystem'
          'gobject-introspection')
 
-source=("${pkgname}::git+git://git.gnome.org/ostree")
+source=("${pkgname}::git+git://git.gnome.org/ostree#tag=v$pkgver")
 md5sums=('SKIP')
-
-pkgver () {
-  cd "${srcdir}/${pkgname}"
-	git describe --long | sed -r 's/^v//;s/([^-]*-g)/r\1/;s/-/./g'
-}
 
 build() {
   cd "${srcdir}/${pkgname}"
