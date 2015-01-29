@@ -69,6 +69,6 @@ package() {
 	make INSTALL_ROOT="$pkgdir" install
       for file in "${pkgdir}"/usr/lib/qt/bin/*; do
               mkdir -p "${pkgdir}"/usr/bin
-              ln -s /usr/lib/qt/bin/$(basename $file) "${pkgdir}"/usr/bin/$(basename $file)-qt5
+              ln -s /usr/lib/qt/bin/$(basename $file) "${pkgdir}"/usr/bin/$(basename $file)
       done
 }
