@@ -67,4 +67,8 @@ build() {
 package() {
 	cd "$srcdir/$_pkgname"
 	make INSTALL_ROOT="$pkgdir" install
+      for file in "${pkgdir}"/usr/lib/qt/bin/*; do
+              mkdir -p "${pkgdir}"/usr/bin
+              ln -s /usr/lib/qt/bin/$(basename $file) "${pkgdir}"/usr/bin/$(basename $file)-qt5
+      done
 }
