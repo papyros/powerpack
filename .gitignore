@@ -12,6 +12,7 @@ source/qt5-base-git/qt5-base
 source/qt5-declarative-git/qt5-declarative
 source/qt5-xmlpatterns-git/qt5-xmlpatterns
 source/qt5-wayland-dev-git/qt5-wayland
+source/qt5-graphicaleffects-git/qt5-graphicaleffects
 source/broadcom-wl/*.tar.gz
 source/papyros-shell/papyros-shell
 source/qml-desktop/qml-desktop
@@ -21,3 +22,4 @@ source/ostree-git/ostree-git
 source/linux-user-chroot/*.tar.gz
 source/xdg-app-git/xdg-app
 source/glib2/glib2
+source/gsettings-qt-bzr/gsettings-qt
