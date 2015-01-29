@@ -15,7 +15,7 @@ only has a few framework packages included.
 
 To build the extra packages not included in the Arch repositories, run:
 
-    ./powerpack/powerpack-build gnome
+    ./powerpack/powerpack-build
 
 After building the extra packages, create the operating system structure,
 install the necessary packages, and commit it to the OSTree repository by running:

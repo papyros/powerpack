@@ -11,7 +11,7 @@ arch=("i686" "x86_64")
 url="https://qt-project.org/"
 license=("GPL3" "LGPL")
 depends=("qt5-base-git")
-makedepends=("git")
+makedepends=("git" "python")
 provides=("$_pkgname")
 conflicts=("$_pkgname")
 source=("$_pkgname::git://gitorious.org/qt/qtxmlpatterns.git#branch=dev")

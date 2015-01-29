@@ -2,18 +2,22 @@
 
 pkgname=papyros-shell
 pkgver=0.0.2
-pkgrel=1
+pkgrel=2
 pkgdesc="Wayland and QtQuick based desktop shell for Papyros"
 arch=("i686" "x86_64")
 url="https://github.com/papyros/papyros-shell"
 license=("GPL")
 depends=("qt5-declarative" "qt5-wayland" "qml-material" "qml-extras" "qml-desktop")
-makedepends=("git")
+makedepends=("git" "python")
 provides=("$pkgname")
 source=("$pkgname::git+https://github.com/papyros/papyros-shell.git#tag=v$pkgver")
 sha256sums=("SKIP")
 
 prepare() {
+	pushd "$srcdir/$pkgname"
+	./qrc.py qml images > papyros-shell.qrc
+	popd
+
 	mkdir -p build
 	cd build
 	qmake "$srcdir/$pkgname"
