@@ -48,7 +48,6 @@ cp -f "$base_dir"/pacman.conf "$build_dir"
 
 # Add the local repository to the pacman config
 
-replace @OS_NAME@ $OSNAME $build_dir/pacman.conf
 replace @REPO_PATH@ $repo_dir $build_dir/pacman.conf
 
 sed -i "s:^#CacheDir.*:CacheDir = $cache_dir:" "$build_dir"/pacman.conf
@@ -59,7 +58,7 @@ do
 done
 
 # Install all the requested packages
-pacstrap -dcC "$build_dir"/pacman.conf "$os_dir" $PKGS
+pacstrap -dcC "$build_dir"/pacman.conf "$os_dir" base base-devel $PKGS
 
 # Set up the os-release file
 cp "$channels_dir"/$channel_name/os-release "$os_dir"/etc/os-release
