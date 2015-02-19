@@ -14,7 +14,7 @@ depends=("qt5-base-git")
 makedepends=("git" "python")
 provides=("$_pkgname")
 conflicts=("$_pkgname")
-source=("$_pkgname::git://gitorious.org/qt/qtxmlpatterns.git#branch=dev")
+source=("$_pkgname::git://gitorious.org/qt/qtxmlpatterns.git#branch=5.5")
 sha256sums=("SKIP")
 
 pkgver() {

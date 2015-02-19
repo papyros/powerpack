@@ -4,7 +4,7 @@
 
 _pkgname=qt5-base
 pkgname=$_pkgname-git
-pkgver=v5.3.0.beta1.414.g78a1c46
+pkgver=v5.4.0.1485.g8fbde82
 pkgrel=1
 pkgdesc="A cross-platform application and UI framework"
 arch=("i686" "x86_64")
@@ -25,7 +25,7 @@ optdepends=(
 )
 provides=("$_pkgname")
 conflicts=("$_pkgname")
-source=("$_pkgname::git://gitorious.org/qt/qtbase.git#branch=dev")
+source=("$_pkgname::git://gitorious.org/qt/qtbase.git#branch=5.5")
 sha256sums=("SKIP")
 
 pkgver() {

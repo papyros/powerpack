@@ -14,7 +14,7 @@ depends=("qt5-declarative-git")
 makedepends=("git")
 provides=("$_pkgname")
 conflicts=("$_pkgname")
-source=("$_pkgname::git://gitorious.org/qt/qtgraphicaleffects.git#branch=dev")
+source=("$_pkgname::git://gitorious.org/qt/qtgraphicaleffects.git#branch=5.5")
 sha256sums=("SKIP")
 
 pkgver() {

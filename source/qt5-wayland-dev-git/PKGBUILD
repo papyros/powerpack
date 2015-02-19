@@ -25,8 +25,7 @@ sha256sums=("SKIP")
 # Definition with userside version of Qt5
 _qt5_userversion=`pkg-config --modversion Qt5Core`
 
-# REPLACE '${_qt5_userversion}' to 'dev' IF YOU WANT USING DEV BRANCH!!!
-source=("$_pkgname::git://gitorious.org/qt/qtwayland.git#branch=dev")
+source=("$_pkgname::git://gitorious.org/qt/qtwayland.git#branch=5.5")
 
 # Number of real cores * number of processors = :) # TODO : Repair
 #_cores_multiplication_processors=$(( `grep "^core id" /proc/cpuinfo | sort -u | wc -l` * `grep "^physical id" /proc/cpuinfo | sort -u | wc -l` ))
