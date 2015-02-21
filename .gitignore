@@ -15,6 +15,7 @@ source/qt5-wayland-dev-git/qt5-wayland
 source/qt5-graphicaleffects-git/qt5-graphicaleffects
 source/broadcom-wl/*.tar.gz
 source/papyros-shell/papyros-shell
+source/papyros-files/papyros-files
 source/qml-desktop/qml-desktop
 source/qml-material/qml-material
 source/qml-extras/qml-extras
