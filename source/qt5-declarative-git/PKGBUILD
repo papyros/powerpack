@@ -4,7 +4,7 @@
 
 _pkgname=qt5-declarative
 pkgname=$_pkgname-git
-pkgver=v5.3.0.alpha1.186.gbcabdfb
+pkgver=v5.4.1.766.g09e903e
 pkgrel=1
 pkgdesc="A cross-platform application and UI framework (QtQml, QtQuick)"
 arch=("i686" "x86_64")
