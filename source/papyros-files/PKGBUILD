@@ -1,13 +1,13 @@
 # Maintainer: Michael Spencer <sonrisesoftware@gmail.com>
 
 pkgname=papyros-files
-pkgver=0.0.1
-pkgrel=1
+pkgver=0.0.5
+pkgrel=2
 pkgdesc="The file manager for Papyros"
 arch=("i686" "x86_64")
 url="https://github.com/papyros/files-app"
 license=("LGPL")
-depends=("qt5-declarative" "qt5-graphicaleffects" "qml-material" "taglib")
+depends=("qt5-declarative-git" "qt5-graphicaleffects-git" "kdeclarative" "qml-material" "taglib")
 makedepends=("git" "cmake" "intltool")
 provides=("$pkgname")
 source=("$pkgname::git+https://github.com/papyros/files-app.git#tag=v$pkgver")

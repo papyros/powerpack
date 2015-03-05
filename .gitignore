@@ -24,3 +24,5 @@ source/linux-user-chroot/*.tar.gz
 source/xdg-app-git/xdg-app
 source/glib2/glib2
 source/gsettings-qt-bzr/gsettings-qt
+source/qt5-quickcontrols-git/qt5-quickcontrols
+source/qt5-svg-git/qt5-svg
