@@ -1,5 +1,5 @@
 pkgname='ostree-git'
-pkgver=2015.3
+pkgver=2015.4
 pkgrel=1
 url="http://git.gnome.org/browse/ostree/tree/README.md"
 pkgdesc='OSTree is a tool for managing bootable, versioned filesystem trees.'
