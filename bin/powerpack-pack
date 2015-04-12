@@ -62,7 +62,7 @@ mount /dev/loop1 "$sysroot"
 mkdir -p "$sysroot"/boot
 mount /dev/loop0 "$sysroot"/boot
 
-./powerpack/powerpack-install -n $OSNAME -o "$ostree_dir" -u "$ORIGIN_URL" "$sysroot"
+./bin/powerpack-install -n $OSNAME -o "$ostree_dir" -u "$ORIGIN_URL" "$sysroot"
 
 umount $sysroot/boot
 umount $sysroot
