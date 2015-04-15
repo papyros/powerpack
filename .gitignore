@@ -9,13 +9,6 @@ temp
 
 source/*/pkg
 source/*/src
-source/qt5-base-git/qt5-base
-source/qt5-declarative-git/qt5-declarative
-source/qt5-xmlpatterns-git/qt5-xmlpatterns
-source/qt5-wayland-dev-git/qt5-wayland
-source/qt5-graphicaleffects-git/qt5-graphicaleffects
-source/qt5-pim-git/qt5-pim
-source/qt5-pim-eds-bzr/qtorganizer5-eds
 source/broadcom-wl/*.tar.gz
 source/papyros-shell/papyros-shell
 source/papyros-files/papyros-files
@@ -27,7 +20,5 @@ source/linux-user-chroot/*.tar.gz
 source/xdg-app-git/xdg-app
 source/glib2/glib2
 source/gsettings-qt-bzr/gsettings-qt
-source/qt5-quickcontrols-git/qt5-quickcontrols
-source/qt5-svg-git/qt5-svg
 source/greenisland-git/greenisland
 source/hawaii-qt5-wayland-git/qtwayland
