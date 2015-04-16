@@ -15,16 +15,16 @@ only has a few framework packages included.
 
 To build the extra packages not included in the Arch repositories, run:
 
-    ./powerpack/powerpack-build
+    ./bin/powerpack-build
 
 After building the extra packages, create the operating system structure,
 install the necessary packages, and commit it to the OSTree repository by running:
 
-    ./powerpack/powerpack-commit gnome
+    ./bin/powerpack-commit gnome
 
 Now, to create a 5GB disk image for testing, run:
 
-    ./powerpack/powerpack-pack gnome
+    ./bin/powerpack-pack gnome
 
 You can take that IMG file and create a virtualbox harddrive image using:
 
