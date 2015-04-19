@@ -3,7 +3,7 @@ function options(){
 	echo "(1) Build Extra Packages"
 	echo "(2) Commit to OS Tree"
 	echo "(3) Create Image"
-	echo "(4) vbox hard drive - requires 4 to successfully finish"
+	echo "(4) vbox hard drive - requires 3 to successfully finish"
 }
 
 function doStuff(){
